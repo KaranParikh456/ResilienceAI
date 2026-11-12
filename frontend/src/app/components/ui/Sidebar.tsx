@@ -62,6 +62,8 @@ export default function Sidebar() {
         })}
       </ul>
 
+      <Link href="/connection" className="relative mb-5 px-4 py-2 text-sm text-ivory/65 hover:text-white">Connection settings</Link>
+
       <div className="relative pt-6 border-t border-white/10 flex items-center gap-2 text-[11px] text-ivory/50 tracking-wide">
         <span className="pulse-dot" />
         Simulated environment

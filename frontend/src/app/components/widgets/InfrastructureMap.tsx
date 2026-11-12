@@ -7,6 +7,7 @@ import '@xyflow/react/dist/style.css';
 import { InfraGraph, NodeStatus } from '@/lib/types';
 
 const statusColors: Record<NodeStatus, { bg: string; border: string }> = {
+    unknown: { bg: '#f4f1ea', border: '#9aa3b2' },
     healthy: { bg: '#e6f0ea', border: '#4f8a6b' },
     degraded: { bg: '#f8eedb', border: '#c98a2b' },
     down: { bg: '#f4dfe1', border: '#a8323e' },

@@ -1,0 +1,23 @@
+// Generated: python -m integrations.generate_contracts
+export type Analysis = { "mode": "ai" | "deterministic_fallback"; "summary": string; "remediation": (string)[]; "evidence_refs": (string)[]; "fixture": boolean };
+export type AnalysisRequest = { "scan_id": string };
+export type Bank = { "id": string; "status": "up" | "down" | "degraded" | "unknown"; "observed_at": string };
+export type Banks = { "banks": (Bank)[]; "fixture"?: boolean };
+export type Capture = { "order_id": string };
+export type CreateOrder = { "product": "resilience-demo" };
+export type Edge = { "source": string; "target": string };
+export type ErrorDetail = { "code": string; "message": string; "request_id": string };
+export type ErrorResponse = { "error": ErrorDetail };
+export type Evidence = { "nodes": (Node)[]; "edges": (Edge)[]; "findings"?: (Finding)[]; "source": string; "fixture"?: boolean };
+export type Failure = { "simulation_id": string; "target": string; "mode": "timeout" | "offline" | "latency"; "duration_seconds": number };
+export type Finding = { "id": string; "dependency_id": string; "severity": "info" | "low" | "medium" | "high" | "critical"; "description": string; "remediation": string };
+export type Graph = { "scan_id": string; "nodes": (Node)[]; "edges": (Edge)[]; "shared_dependencies": (Impact)[]; "predicted_impact": (Impact)[]; "measurement"?: "prediction_only"; "fixture": boolean };
+export type Health = { "status": string; "capabilities"?: Record<string, unknown> };
+export type Impact = { "dependency_id": string; "potentially_affected_services": (string)[]; "evidence_refs": (string)[] };
+export type Job = { "id": string; "state": "queued" | "running" | "completed" | "failed"; "evidence"?: Evidence | null; "error"?: string | null };
+export type Node = { "id": string; "kind": "service" | "dependency"; "label": string };
+export type Payment = { "order_id": string; "status": string; "amount": string; "currency"?: "USD"; "approval_url"?: string | null; "capture_id"?: string | null; "environment"?: "sandbox" };
+export type ScanRequest = { "repository": string };
+export type Simulation = { "id": string; "state": "queued" | "running" | "completed" | "failed"; "measured_results"?: Record<string, unknown>; "fixture"?: boolean };
+export type SimulationStart = { "scan_id": string; "targets": (string)[] };
+export type WebhookResult = { "accepted"?: boolean; "duplicate"?: boolean };

@@ -8,7 +8,7 @@ import { InfrastructureMap } from '@/app/components/widgets/InfrastructureMap';
 import PageHeader from '@/app/components/ui/PageHeader';
 
 const legend = [
-    { label: 'Healthy', color: 'bg-ok' },
+    { label: 'Unmeasured', color: 'bg-sand' },
     { label: 'Degraded', color: 'bg-warn' },
     { label: 'Down', color: 'bg-bad' },
     { label: 'Vulnerable', color: 'bg-info' },
@@ -30,7 +30,7 @@ export default function MapPage() {
                 index="03"
                 eyebrow="Infrastructure"
                 title="Infrastructure Map"
-                subtitle="Banks, services and their dependencies. Failed or vulnerable components are highlighted."
+                subtitle="Scanner topology and predicted impact only. Node availability is unmeasured; Simulator shows observed health."
             />
 
             <div className="flex gap-6">

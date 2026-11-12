@@ -17,8 +17,8 @@
 }
 
 @theme inline {
-  --font-display: var(--font-baskerville), Georgia, serif;
-  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-display: Georgia, serif;
+  --font-sans: system-ui, sans-serif;
 }
 
 html {

@@ -1,7 +1,7 @@
 // src/app/simulator/page.tsx
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState, useRef } from 'react';
 import {
     fetchInfrastructureGraph,
     fetchSimulationState,
@@ -38,13 +38,16 @@ export default function SimulatorPage() {
             .catch((e: Error) => setGraphError(e.message));
     }, []);
 
+    const refreshing = useRef(false);
     const refresh = useCallback(async () => {
+        if (refreshing.current) return;
+        refreshing.current = true;
         try {
             setSim(await fetchSimulationState());
             setSimError(null);
         } catch (e) {
             setSimError((e as Error).message);
-        }
+        } finally { refreshing.current = false; }
     }, []);
 
     // Poll the simulation once a second while running
@@ -75,7 +78,7 @@ export default function SimulatorPage() {
             ...baseGraph,
             nodes: baseGraph.nodes.map((n) => ({
                 ...n,
-                status: downBanks.includes(n.id) ? 'down' : 'healthy',
+                status: downBanks.includes(n.id) ? 'down' : n.status,
             })),
         };
     }, [baseGraph, downBanks]);
@@ -83,7 +86,7 @@ export default function SimulatorPage() {
     const total = transactions.length;
     const failed = transactions.filter((t) => t.status === 'FAILED').length;
     const rerouted = transactions.filter((t) => t.status === 'REROUTED').length;
-    const successRate = total === 0 ? 100 : Math.round(((total - failed) / total) * 100);
+    const successRate = total === 0 ? 0 : Math.round(((total - failed) / total) * 100);
     const bankLabel = (id: string) => banks.find((b) => b.id === id)?.label ?? id;
 
     return (
@@ -92,7 +95,7 @@ export default function SimulatorPage() {
                 index="04"
                 eyebrow="Simulation"
                 title="Resilience Simulator"
-                subtitle="Fail a bank and watch how transactions respond."
+                subtitle="Measured synthetic bank transactions. Failures recover automatically after 5 seconds."
             />
 
             {simError && (
@@ -107,12 +110,13 @@ export default function SimulatorPage() {
                     return (
                         <button
                             key={b.id}
-                            onClick={() => act(() => setBankFailure(b.id, !isDown))}
+                            disabled={isDown}
+                            onClick={() => act(() => setBankFailure(b.id, true))}
                             className={`px-4 py-2 rounded text-sm font-medium text-paper transition ${
                                 isDown ? 'bg-ok hover:bg-ok/90' : 'bg-bad hover:bg-bad/90'
                             }`}
                         >
-                            {isDown ? `Recover ${b.label}` : `Fail ${b.label}`}
+                            {isDown ? `Recovering ${b.label}` : `Fail ${b.label}`}
                         </button>
                     );
                 })}
@@ -121,10 +125,11 @@ export default function SimulatorPage() {
                     <input
                         type="checkbox"
                         checked={failover}
+                        disabled
                         onChange={(e) => act(() => setFailoverEnabled(e.target.checked))}
                         className="accent-brass"
                     />
-                    Automatic failover
+                    Automatic failover (unavailable)
                 </label>
 
                 <button
@@ -137,7 +142,7 @@ export default function SimulatorPage() {
                     onClick={() => act(resetSimulation)}
                     className="px-4 py-2 rounded text-sm font-medium bg-sand text-navy hover:bg-brass-soft transition"
                 >
-                    Reset
+                    Clear observations
                 </button>
             </div>
 

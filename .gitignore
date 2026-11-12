@@ -28,3 +28,12 @@ node_modules/
 
 # Scanner output
 scans/
+# Local integration state, secrets, and generated frontend files
+.env.*
+!.env.example
+work/
+.next/
+*.tsbuildinfo
+next-env.d.ts
+*.sqlite
+*.sqlite3

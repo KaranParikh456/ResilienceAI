@@ -20,7 +20,7 @@ export interface ActivityEntry {
   message: string;
 }
 
-export type Severity = 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW';
+export type Severity = 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW' | 'INFO';
 
 export interface Vulnerability {
     id: string;
@@ -29,10 +29,10 @@ export interface Vulnerability {
     installedVersion: string;
     fixedVersion: string | null;
     severity: Severity;
-    source: 'Trivy' | 'OSV-Scanner';
+    source: string;
 }
 
-export type NodeStatus = 'healthy' | 'degraded' | 'down' | 'vulnerable';
+export type NodeStatus = 'healthy' | 'degraded' | 'down' | 'vulnerable' | 'unknown';
 
 export interface InfraNode {
     id: string;

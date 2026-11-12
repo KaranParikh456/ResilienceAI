@@ -49,7 +49,7 @@ export default function SecurityPage() {
                     value={repoUrl}
                     onChange={(e) => setRepoUrl(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && handleScan()}
-                    placeholder="https://github.com/owner/repo"
+                    placeholder="ResilienceAI-integration"
                     className="flex-1 bg-ivory border border-line rounded px-4 py-2.5 text-navy placeholder:text-navy-soft/60 focus:outline-none focus:ring-2 focus:ring-brass"
                 />
                 <button
@@ -65,7 +65,7 @@ export default function SecurityPage() {
                 <div className="text-center py-16 border border-dashed border-line rounded-md">
                     <p className="text-4xl mb-3 grayscale opacity-70">🛡️</p>
                     <p className="font-display text-xl text-navy">No scan yet</p>
-                    <p className="text-sm text-navy-soft mt-1">Paste a GitHub link above to begin.</p>
+                    <p className="text-sm text-navy-soft mt-1">Enter a directory relative to the configured repository root.</p>
                 </div>
             )}
 
@@ -73,7 +73,7 @@ export default function SecurityPage() {
                 <div className="text-center py-16">
                     <div className="mx-auto h-10 w-10 rounded-full border-4 border-sand border-t-brass animate-spin" />
                     <p className="font-display text-lg text-navy mt-4">Running Trivy and OSV-Scanner</p>
-                    <p className="text-sm text-navy-soft">This takes a moment.</p>
+                    <p className="text-sm text-navy-soft">Polling until completed or failed.</p>
                 </div>
             )}
 
