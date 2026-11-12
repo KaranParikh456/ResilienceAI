@@ -20,11 +20,11 @@ node_modules/
 
 # Logs
 *.log
-<<<<<<< HEAD
+
 # Local backend persistence
 *.db
 *.db-shm
 *.db-wal
-=======
+
+# Scanner output
 scans/
->>>>>>> origin/ishan/security-engine
