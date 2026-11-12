@@ -1,0 +1,121 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ivory: #f4f1ea;
+  --color-paper: #fbfaf7;
+  --color-navy: #1c2a3f;
+  --color-navy-soft: #5b6678;
+  --color-brass: #b08d57;
+  --color-brass-soft: #e6d9bd;
+  --color-sand: #ebe5d8;
+  --color-line: #e2dccf;
+
+  --color-ok: #4f8a6b;
+  --color-warn: #c98a2b;
+  --color-bad: #a8323e;
+  --color-info: #4a6fa5;
+}
+
+@theme inline {
+  --font-display: var(--font-baskerville), Georgia, serif;
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-ivory);
+  color: var(--color-navy);
+  font-family: var(--font-sans);
+}
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+  letter-spacing: -0.01em;
+}
+
+::selection {
+  background: var(--color-brass-soft);
+  color: var(--color-navy);
+}
+
+/* Faint paper grain over the whole app */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+  opacity: 0.06;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+/* Slim scrollbars */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-brass-soft) transparent;
+}
+
+/* Staggered entrance: every top-level block on a page fades up in turn */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: none; }
+}
+
+main > div > * {
+  animation: rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+main > div > *:nth-child(2) { animation-delay: 0.08s; }
+main > div > *:nth-child(3) { animation-delay: 0.16s; }
+main > div > *:nth-child(4) { animation-delay: 0.24s; }
+main > div > *:nth-child(5) { animation-delay: 0.32s; }
+main > div > *:nth-child(6) { animation-delay: 0.4s; }
+main > div > *:nth-child(7) { animation-delay: 0.48s; }
+
+/* Pulsing "live" dot */
+@keyframes pulse-ring {
+  0% { box-shadow: 0 0 0 0 rgb(79 138 107 / 0.55); }
+  70% { box-shadow: 0 0 0 8px rgb(79 138 107 / 0); }
+  100% { box-shadow: 0 0 0 0 rgb(79 138 107 / 0); }
+}
+
+.pulse-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  background: var(--color-ok);
+  animation: pulse-ring 2s infinite;
+}
+
+/* Risk gauge draws itself in */
+@keyframes ring-draw {
+  from { stroke-dashoffset: var(--circ); }
+}
+
+.ring-draw {
+  animation: ring-draw 1.4s cubic-bezier(0.2, 0.7, 0.2, 1) 0.3s both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* Loading skeleton shimmer */
+@keyframes shimmer {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}
+
+.skeleton {
+  background: linear-gradient(100deg, var(--color-sand) 30%, var(--color-paper) 50%, var(--color-sand) 70%);
+  background-size: 200% 100%;
+  animation: shimmer 1.6s linear infinite;
+  border-radius: 6px;
+}

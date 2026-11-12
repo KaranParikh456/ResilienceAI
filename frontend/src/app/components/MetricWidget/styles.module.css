@@ -1,0 +1,16 @@
+/* src/appboard/components/MetricWidget/styles.module.css */
+@reference "../../../styles/global.css";
+.widgetCard {
+    @apply bg-white shadow rounded-xl p-6 border border-gray-100; /* Uses Tailwind for base look */
+}
+
+.titleText {
+    /* Used to ensure the title is visible and styled */
+    color: #6c757d; 
+    font-weight: 500;
+}
+
+.valueText {
+    /* Ensures the large number stands out */
+    @apply text-4xl font-extrabold mt-2 text-gray-900; 
+}
