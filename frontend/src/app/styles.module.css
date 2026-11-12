@@ -1,0 +1,24 @@
+/* src/appboard/styles.module.css */
+
+.dashboardContainer {
+    max-width: 1200px; /* Constrain width on large screens */
+    margin: 0 auto;   /* Center the container */
+    padding-bottom: 40px; /* Space at the bottom of the page */
+}
+
+.pageHeader {
+    border-bottom: 1px solid #eee;
+    /* We handle padding (p-4) via Tailwind in the component, but we define base styles here. */
+    padding-top: 2rem;
+}
+
+.mainSection {
+    margin-top: 30px; /* Space between header and metrics */
+}
+
+.footer {
+    text-align: center;
+    padding: 20px 0;
+    border-top: 1px solid #eee;
+    color: #6c757d; /* Gray text color for the footer */
+}
