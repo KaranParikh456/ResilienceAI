@@ -1,0 +1,31 @@
+x-bank: &bank
+  build: ./bank
+  restart: unless-stopped
+  networks:
+    - resilience-net
+
+services:
+  bank-a:
+    <<: *bank
+    environment:
+      BANK_ID: bank_a
+    ports:
+      - "127.0.0.1:8001:8000"
+
+  bank-b:
+    <<: *bank
+    environment:
+      BANK_ID: bank_b
+    ports:
+      - "127.0.0.1:8002:8000"
+
+  bank-c:
+    <<: *bank
+    environment:
+      BANK_ID: bank_c
+    ports:
+      - "127.0.0.1:8003:8000"
+
+networks:
+  resilience-net:
+    name: resilience-net

@@ -1,0 +1,172 @@
+{
+  "run_at": "2026-11-12T12:25:27+00:00",
+  "scenarios": {
+    "baseline": {
+      "results": {
+        "bank_a": {
+          "requests": 30,
+          "success": 30,
+          "failed_with_response": 0,
+          "no_response": 0,
+          "success_rate": 1.0,
+          "avg_ms": 84.1,
+          "p95_ms": 125.0
+        },
+        "bank_b": {
+          "requests": 30,
+          "success": 30,
+          "failed_with_response": 0,
+          "no_response": 0,
+          "success_rate": 1.0,
+          "avg_ms": 80.2,
+          "p95_ms": 127.5
+        },
+        "bank_c": {
+          "requests": 30,
+          "success": 30,
+          "failed_with_response": 0,
+          "no_response": 0,
+          "success_rate": 1.0,
+          "avg_ms": 76.7,
+          "p95_ms": 112.1
+        }
+      },
+      "pass": true,
+      "expect": "100% success on all banks"
+    },
+    "idempotency": {
+      "results": {
+        "replay_returns_stored_result": true,
+        "conflict_returns_409": true,
+        "concurrent_duplicates_processed_once": true
+      },
+      "pass": true,
+      "expect": "replay = stored result, different payload = 409, 20 parallel duplicates = 1 result"
+    },
+    "latency_injection": {
+      "results": {
+        "bank_a": {
+          "requests": 10,
+          "success": 10,
+          "failed_with_response": 0,
+          "no_response": 0,
+          "success_rate": 1.0,
+          "avg_ms": 1088.2,
+          "p95_ms": 1127.0
+        },
+        "bank_b": {
+          "requests": 10,
+          "success": 10,
+          "failed_with_response": 0,
+          "no_response": 0,
+          "success_rate": 1.0,
+          "avg_ms": 79.7,
+          "p95_ms": 104.6
+        },
+        "bank_a_health": "degraded"
+      },
+      "pass": true,
+      "expect": "bank_a avg >= 1000 ms and degraded, bank_b unaffected"
+    },
+    "random_errors": {
+      "results": {
+        "configured_error_rate": 0.5,
+        "observed_error_rate": 0.49,
+        "bank_a": {
+          "requests": 200,
+          "success": 102,
+          "failed_with_response": 98,
+          "no_response": 0,
+          "success_rate": 0.51,
+          "avg_ms": 50.1,
+          "p95_ms": 123.9
+        }
+      },
+      "pass": true,
+      "expect": "observed error rate within 0.10 of 0.5 over 200 requests"
+    },
+    "down_isolation": {
+      "results": {
+        "bank_a": {
+          "requests": 20,
+          "success": 0,
+          "failed_with_response": 20,
+          "no_response": 0,
+          "success_rate": 0.0,
+          "avg_ms": 10.3,
+          "p95_ms": 30.9
+        },
+        "bank_b": {
+          "requests": 20,
+          "success": 20,
+          "failed_with_response": 0,
+          "no_response": 0,
+          "success_rate": 1.0,
+          "avg_ms": 78.8,
+          "p95_ms": 133.8
+        },
+        "bank_c": {
+          "requests": 20,
+          "success": 20,
+          "failed_with_response": 0,
+          "no_response": 0,
+          "success_rate": 1.0,
+          "avg_ms": 88.6,
+          "p95_ms": 123.9
+        }
+      },
+      "pass": true,
+      "expect": "bank_a 0% success + /health 503, bank_b and bank_c 100%"
+    },
+    "reset_recovery": {
+      "results": {
+        "recovery_ms": 58.2
+      },
+      "pass": true,
+      "expect": "bank_a processes again after reset"
+    },
+    "container_stop_start": {
+      "results": {
+        "during_outage_bank_a": {
+          "requests": 5,
+          "success": 0,
+          "failed_with_response": 0,
+          "no_response": 5,
+          "success_rate": 0.0,
+          "avg_ms": 2012.6,
+          "p95_ms": 2012.5
+        },
+        "during_outage_bank_b": {
+          "requests": 10,
+          "success": 10,
+          "failed_with_response": 0,
+          "no_response": 0,
+          "success_rate": 1.0,
+          "avg_ms": 85.5,
+          "p95_ms": 115.7
+        },
+        "during_outage_bank_c": {
+          "requests": 10,
+          "success": 10,
+          "failed_with_response": 0,
+          "no_response": 0,
+          "success_rate": 1.0,
+          "avg_ms": 83.2,
+          "p95_ms": 117.7
+        },
+        "restart_to_healthy_s": 0.97,
+        "after_recovery_bank_a": {
+          "requests": 10,
+          "success": 10,
+          "failed_with_response": 0,
+          "no_response": 0,
+          "success_rate": 1.0,
+          "avg_ms": 104.0,
+          "p95_ms": 124.3
+        }
+      },
+      "pass": true,
+      "expect": "bank_a unreachable, b/c unaffected, bank_a healthy again after start"
+    }
+  }
+}
