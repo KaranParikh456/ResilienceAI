@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: resilienceai-api
+    runtime: python
+    plan: starter
+    buildCommand: pip install -r requirements.lock.txt
+    startCommand: uvicorn backend.main:app --host 0.0.0.0 --port $PORT --workers 1
+    healthCheckPath: /ready
+    disk:
+      name: resilience-data
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.13.7
+      - key: DATABASE_PATH
+        value: /var/data/resilience.db
+      - key: REPOSITORY_ROOT
+        value: /var/data/repositories
+      - key: API_TOKENS
+        sync: false
+      - key: CORS_ORIGINS
+        sync: false
+      - key: FAILURE_ENABLED
+        value: "false"

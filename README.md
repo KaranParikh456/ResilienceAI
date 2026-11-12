@@ -82,3 +82,8 @@ A collaborative hackathon project combining cybersecurity, AI and distributed sy
 ## Vision
 
 **Secure the software. Identify shared failure points. Simulate disasters. Validate recovery.**
+## Integration backend
+
+Backend setup, authentication, PayPal Sandbox, tests, and deployment: [Backend setup](docs/BACKEND_SETUP.md).
+
+Scanner and simulator handoff: [Integration contracts](docs/INTEGRATION.md).

@@ -20,3 +20,7 @@ node_modules/
 
 # Logs
 *.log
+# Local backend persistence
+*.db
+*.db-shm
+*.db-wal
