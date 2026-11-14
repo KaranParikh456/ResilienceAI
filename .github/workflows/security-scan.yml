@@ -1,0 +1,67 @@
+name: Security Scan
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  TRIVY_VERSION: "0.76.2"
+  OSV_VERSION: "2.7.1"
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+
+      - name: Install Python dependency
+        run: pip install pydantic
+
+      - name: Install Trivy (pinned version, checksum verified)
+        run: |
+          set -euo pipefail
+          cd "$RUNNER_TEMP"
+          base="https://github.com/aquasecurity/trivy/releases/download/v${TRIVY_VERSION}"
+          file="trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz"
+          curl -fsSLO "$base/$file"
+          curl -fsSLO "$base/trivy_${TRIVY_VERSION}_checksums.txt"
+          awk -v f="$file" '$2 == f' "trivy_${TRIVY_VERSION}_checksums.txt" | sha256sum -c -
+          tar -xzf "$file" trivy
+          sudo install -m 0755 trivy /usr/local/bin/trivy
+          trivy --version
+
+      - name: Install OSV-Scanner (pinned version, checksum verified)
+        run: |
+          set -euo pipefail
+          cd "$RUNNER_TEMP"
+          base="https://github.com/google/osv-scanner/releases/download/v${OSV_VERSION}"
+          curl -fsSLO "$base/osv-scanner_linux_amd64"
+          curl -fsSLO "$base/osv-scanner_SHA256SUMS"
+          awk '$2 == "osv-scanner_linux_amd64"' osv-scanner_SHA256SUMS | sha256sum -c -
+          sudo install -m 0755 osv-scanner_linux_amd64 /usr/local/bin/osv-scanner
+          osv-scanner --version
+
+      - name: Prepare scan target (skip the intentionally vulnerable test fixtures)
+        run: rsync -a --exclude='.git' --exclude='tests/fixtures' ./ "$RUNNER_TEMP/scan-target/"
+
+      - name: Run security scan
+        env:
+          REPO: ${{ github.repository }}
+        run: python -m backend.security.cli "$RUNNER_TEMP/scan-target" --repository "$REPO" --output-dir scans
+
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-results
+          path: scans/
+          if-no-files-found: ignore
